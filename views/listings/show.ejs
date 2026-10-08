@@ -1,4 +1,9 @@
 <% layout("/layouts/boilerplate") %>
+<script> 
+    const mapboxToken = "<%= process.env.MAP_TOKEN %>";
+    const listing = <%- JSON.stringify(listing) %>;
+    
+</script>
 <div class="row mt-4 justify-content-center">
     <div class="col-12 col-lg-8">
         <h3 class="mb-3"><b><%= listing.title %></b></h3>
@@ -30,8 +35,9 @@
                 <% } %>
                 
                 <div class="review-section">
-                    <hr>
+                    
                     <% if (currUser) { %>
+                    <hr>
                     <h4>Leave a Review</h4>
                     <form class="review-form needs-validation" action="/listings/<%= listing.id %>/reviews" method="POST" novalidate>
                         <!-- <div class="mb-3 mt-3">
@@ -81,8 +87,10 @@
                     </form>
                     <hr />
                     <% } %>
-                    <p><b>All Reviews</b></p>
+                    <% if (listing.reviews.length > 0) { %>
+                        <p>No reviews yet!</p>
                     <div class="row">
+                        <p><b>All Reviews</b></p>
                     <% for (review of listing.reviews) { %>
                         <div class="card col-5 ms-3 mb-3">
                         <div class="card-body">
@@ -96,9 +104,16 @@
                         </div>
                     <% } %>
                     </div>
+                    <% } %>
+                </div>
+                <div class="col-8">
+                    <h3>Where you will be</h3>
+                    <div id="map"></div>
                 </div>
 
             </div>
         </div>
     </div>
 </div>
+
+<script src="/css/js/map.js"></script>

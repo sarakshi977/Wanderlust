@@ -1,7 +1,10 @@
+const dns = require("dns");
+
+dns.setServers(["8.8.8.8", "1.1.1.1"]);
+
 if (process.env.NODE_ENV !== "production") {
   require("dotenv").config();
 }
-console.log(process.env.SECREAT);
 
 const express = require("express");
 const app = express();
@@ -21,14 +24,7 @@ const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
 const MONGO_URL = "mongodb://127.0.0.1:27017/wanderlust";
-
-main()
-  .then(() => {
-    console.log("connected to DB");
-  })
-  .catch((err) => {
-    console.log(err);
-  });
+// const dburl = process.env.ATLASDB_URL;
 
 async function main() {
   await mongoose.connect(MONGO_URL);
@@ -99,6 +95,17 @@ app.use((err, req, res, next) => {
 });
 
 
-app.listen(8080, () => {
-  console.log("server is listening to port 8080");
-});
+async function startServer() {
+  try {
+    await main();
+    console.log("connected to DB");
+    app.listen(8080, () => {
+      console.log("server is listening to port 8080");
+    });
+  } catch (err) {
+    console.error("Failed to connect to MongoDB:", err);
+    process.exitCode = 1;
+  }
+}
+
+startServer();

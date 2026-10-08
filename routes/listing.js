@@ -31,7 +31,8 @@ router.route("/:id")
   .put(                                                             //Update Route
     isLoggedIn,
     isOwner,
-    validateListing, 
+    validateListing,
+    upload.single("listing[image]"), 
     wrapAsync(listingController.updateListing))
 
   .delete(                                                          //Delete Route

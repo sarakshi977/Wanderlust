@@ -192,3 +192,11 @@ footer {
     border: 2px solid red;
     background-color: #fff5f5;
 } */
+
+/* Map */
+
+#map {
+    position: relative;
+    height: 400px;
+    width: 100%;
+}
