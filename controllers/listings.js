@@ -15,29 +15,59 @@ const normalizeListingData = (listing) => {
     return normalized;
 };
 
-module.exports.index = async (req, res) => {
-    // const allListings = await Listing.find({});
-    // res.render("listings/index.ejs", { allListings });
-    const { search } = req.query;
+// module.exports.index = async (req, res, next) => {
+//     // const allListings = await Listing.find({});
+//     // res.render("listings/index.ejs", { allListings });
+//     const { search } = req.query;
 
-    let allListings;
+//     let allListings;
 
-    if (search) {
-      allListings = await Listing.find({
-        $or: [
-          { title: { $regex: search, $options: "i" } },
-          { location: { $regex: search, $options: "i" } },
-          { country: { $regex: search, $options: "i" } },
+//     if (search) {
+//       allListings = await Listing.find({
+//         $or: [
+//           { title: { $regex: search, $options: "i" } },
+//           { location: { $regex: search, $options: "i" } },
+//           { country: { $regex: search, $options: "i" } },
           
-        ]
-      });
-    } else {
-      allListings = await Listing.find({});
+//         ]
+//       });
+//     } else {
+//       allListings = await Listing.find({});
+//     }
+
+//     res.render("listings/index.ejs", { allListings });
+  
+//   };
+
+module.exports.index = async (req, res, next) => {
+  try {
+    const { search, category } = req.query;
+
+    let filter = {};
+
+    // Search functionality
+    if (search) {
+      filter.$or = [
+        { title: { $regex: search, $options: "i" } },
+        { location: { $regex: search, $options: "i" } },
+        { country: { $regex: search, $options: "i" } }
+      ];
     }
 
+    // Category functionality
+    if (category && category !== "Trending") {
+      filter.category = category;
+    }
+
+    const allListings = await Listing.find(filter);
+
     res.render("listings/index.ejs", { allListings });
-  
-  };
+
+  } catch (err) {
+    console.log("ERROR IN /LISTINGS:", err);
+    next(err);
+  }
+};
 
 module.exports.renderNewForm = (req, res) => {
   res.render("listings/new.ejs", { listing: {} });

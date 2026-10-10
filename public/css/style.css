@@ -11,7 +11,8 @@ body {
 }
 
 .navbar {
-    height: 5rem;
+    min-height: 5rem;
+    height: auto;
     background-color: white;
 }
 
@@ -200,3 +201,30 @@ footer {
     height: 400px;
     width: 100%;
 }
+
+
+
+@media (max-width: 768px) {
+    .navbar .container-fluid {
+        flex-wrap: wrap;
+    }
+
+    .search-form {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        width: 100%;
+    }
+
+    .search-inp {
+        flex: 1;
+        min-width: 0;
+    }
+
+    #filters {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+    }
+}
+
